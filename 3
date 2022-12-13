@@ -1,0 +1,54 @@
+from sympy import *
+import numpy as np
+import matplotlib.pyplot as plt
+var('y', cls=Function)
+var('s')
+var('x')
+y0 = Rational(2**1/2)
+g = 0
+Lg = laplace_transform(g,x,s, noconds=True)
+d2 = s*2*y(s) - y0
+d0 = y(s)
+d = d2 + 4*d0
+de = Eq(d, Lg)
+rez = solve(de, y(s))[0]
+soln = inverse_laplace_transform(rez, s,x)
+f = lambdify(x, soln, 'numpy')
+x = np.linspace(0, 10)
+
+plt.title("solution sumpy")
+plt.grid(True)
+plt.xlabel('x', fontsize=12)
+plt.ylabel('y(x)', fontsize=12)
+plt.plot(x, f(x), 'g', linewidth=2)
+plt.show()
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.integrate import solve_ivp
+
+plt.style.use('seaborn-poster')
+
+%matplotlib inline
+
+F = lambda x, y: -2*y
+
+t_eval = np.arange(0, 10, 0.01)
+sol = solve_ivp(F, [0, 10], [Rational(2**1/2)], t_eval=t_eval)
+
+plt.figure()
+plt.title("solution scipy")
+plt.grid(True)
+plt.xlabel('x', fontsize=12)
+plt.ylabel('y(x)',fontsize=12)
+plt.plot(sol.t, sol.y[0])
+plt.show()
+
+plt.figure()
+plt.title("solution scipy")
+plt.grid(True)
+plt.xlabel('x', fontsize=12)
+plt.ylabel('del(y(x))',fontsize=12)
+plt.plot(sol.t, sol.y[0]-f(sol.t))
+plt.show()
+
