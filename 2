@@ -1,0 +1,20 @@
+import numpy as np
+from numpy import matrix
+from sympy import * 
+init_printing(use_unicode=True)
+
+with open(r"E:\лабы питон\тестовая штука.txt") as datFile:
+    d1 = [data.split() for data in datFile]
+
+M = np.arange(int(d1[0][0])**2)
+M = M.reshape(int(d1[0][0]), int(d1[0][0]))
+V = np.arange(int(d1[0][0]))
+
+for i in range(int(d1[0][0])):
+    for j in range(int(d1[0][0])):
+        M[i,j]=float(d1[i+1][j])
+
+for i in range(int(d1[0][0])):
+    V[i]=float(d1[len(d1)-1][i])
+    
+print(np.linalg.solve(M,V))
